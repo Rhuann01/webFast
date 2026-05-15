@@ -1,0 +1,1 @@
+pub mod vite_react_tailwindcss;
