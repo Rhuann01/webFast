@@ -19,7 +19,7 @@
     match args.trigger {
         Comandos::Create { nome } => {
             print!("{nome} is being created");
-            templates::vite_react_tailwindcss::createProject(&nome);
+            templates::vite_react_tailwindcss::create_project(&nome);
         }, 
         Comandos::Delete { nome } => println!("teste {nome}")
     }
