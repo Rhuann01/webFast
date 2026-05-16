@@ -71,5 +71,7 @@ return (
 
     Command::new("npm").arg("install").status().expect("Error install npm modules");
     Command::new("npm").args(["run", "dev"]).status().expect("Error install npm modules");
+
+    print!("{}", format!("Project os").green().bold());
     
 }
