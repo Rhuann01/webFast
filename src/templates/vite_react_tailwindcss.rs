@@ -8,7 +8,7 @@ pub fn create_project(name: &str) {
     println!("{}", format!("{name} is being created...").blue().bold());
     const ICON: &[u8] = include_bytes!("../assets/WebFast.svg");
 
-    Command::new("npm").args(["create", "vite@latest", name, "--template", "react-ts", "-y", "--no-immediate"])
+    Command::new("npm").args(["create", "vite@latest", name,"--", "--template", "react-ts", "-y", "--no-immediate"])
     .status().expect(&"Crate vite project error".to_string().red().bold());
 
     println!("{}", format!("Project {name} created with react + vite now config tailwindcss..").blue().bold());
@@ -19,6 +19,7 @@ pub fn create_project(name: &str) {
 
     fs::write("vite.config.ts", r#"
 import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 
 export default defineConfig({
