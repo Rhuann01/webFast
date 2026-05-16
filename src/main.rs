@@ -2,7 +2,7 @@
     mod templates;
 
     #[derive(Parser)]
-    #[command(name = "Fast web",version = "1.0", about = "project to build fast web applications, like react-vite + tailwindcss already configured and with future additions")]
+    #[command(name = "Web Fast",version = "1.0", about = "project to build fast web applications, like react-vite + tailwindcss already configured and with future additions")]
     struct Args {
         #[command(subcommand)]
         trigger: Comandos,

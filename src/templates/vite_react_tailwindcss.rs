@@ -56,9 +56,11 @@ return (
        <h1 className=" text-2xl font-bold text-white ">
         Project configured with 
        </h1>
-      <img className="w-10" src="WebFast.svg" alt="LogoProject" />
+        <a href="https://github.com/Rhuann01/webFast.git"  target="_blank">
+          <img className="w-10" src="WebFast.svg" alt="LogoProject" />
+        </a>
      </div>
-      <a href="https://github.com/Rhuann01" className=" text-gray-400 hover:text-white">
+      <a href="https://github.com/Rhuann01" target="_blank" className=" text-gray-400 hover:text-white">
         made by @Rhuann01
       </a>
     </section>
@@ -71,8 +73,8 @@ return (
     }
 
     Command::new("npm").arg("install").status().expect("Error install npm modules");
+    println!("{}", format!("\nTHE PROJECT IS READY, RUNNING... ").green().bold());
     Command::new("npm").args(["run", "dev"]).status().expect("Error install npm modules");
 
-    print!("{}", format!("Project os").green().bold());
     
 }
