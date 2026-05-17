@@ -32,7 +32,7 @@ jobs:
       - name: Instalar Rust
         uses: dtolnay/rust-toolchain@stable
         with: 
-          targets: ${{ matrix.os }}
+          targets: ${{ matrix.target }}
 
       - name: Build
         run: cargo build --release --target ${{ matrix.target }}
