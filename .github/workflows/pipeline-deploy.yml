@@ -7,6 +7,8 @@ jobs:
   build:
     name: Buid ${{matrix.target}}
     runs-on: ${{matrix.os}}
+    permissions: 
+      contents: write
     strategy:
       matrix:  
         include: 
@@ -49,7 +51,7 @@ jobs:
           cd target/${{matrix.target}}/release
           Compress-Archive -Path ${{matrix.binary}} -DestinationPath web-fast-${{matrix.target}}.zip
         
-      - name: Upload Realse
+      - name: Upload Release
         uses: softprops/action-gh-release@v2 
         with: 
           files: |
