@@ -1,0 +1,53 @@
+name: deploy and throw release;
+on:
+  push:
+    tags:
+      - "v*"
+jobs: 
+  build:
+    name: Buid ${{matrix.target}}
+    runs-on: ${{matrix.os}}
+    strategy:
+      matrix:  
+        include: 
+          - os: ubuntu-latest
+            target: x86_64-unknown-linux-gnu
+            binary: web-fast
+          
+          - os: macos-latest
+            target: x86_64-apple-darwin
+            binary: web-fast
+
+          - os: macos-latest
+            target: aarch64-apple-darwin
+            binary: web-fast
+
+    steps: 
+      - uses: actions/checkout@v4
+
+      - name: Instalar Rust
+        uses: dtolnay/rust-toolchain@stable
+        with: 
+          target: ${{ matrix.os }}
+
+      - name: Build
+        run: cargo build --release --target ${{ matrix.target }}
+
+      - name: Empacotar (linux mac)
+        if: matrix.os != 'windows-latest'
+        run: | 
+          cd target/${{ matrix.target }}/release
+          tar -czf web-fast-${{matrix.target}}.tar.gz ${{matrix.binary}}
+
+      - name: Empacotar (Windows)
+        if: matrix.os == 'windows-latest'
+        run: | 
+          cd target/${{matrix.target}}/release
+          Compress-Archive -Path ${{matrix.binary}} -DestinationPath web-fast-${{matrix.target}}.zip
+        
+      - name: Upload Realse
+        uses: softprops/action-gh-release@v2 
+        with: 
+          files: |
+            target/${{matrix.target}}/release/*.tar.gz
+            target/${{matrix.target}}/release/*.zip
