@@ -1,23 +1,42 @@
-use std::{env, fs};
-use std::process::Command;
 use colored::Colorize;
+use std::process::Command;
+use std::{env, fs};
 
 pub fn create_project(name: &str) {
     let import_tailwindcss = r#"@import "tailwindcss";"#;
     let files_svg_default = ["favicon.svg", "icons.svg"];
     println!("{}", format!("{name} is being created...").blue().bold());
     const ICON: &[u8] = include_bytes!("../assets/WebFast.svg");
+    Command::new("npm")
+        .args([
+            "create",
+            "vite@latest",
+            name,
+            "--",
+            "--template",
+            "react-ts",
+            "-y",
+            "--no-immediate",
+        ])
+        .status()
+        .expect(&"Crate vite project error".to_string().red().bold());
 
-    Command::new("npm").args(["create", "vite@latest", name,"--", "--template", "react-ts", "-y", "--no-immediate"])
-    .status().expect(&"Crate vite project error".to_string().red().bold());
+    println!("{}", format!("Project {name} created with react + vite")
+            .blue()
+            .bold()
+    );
 
-    println!("{}", format!("Project {name} created with react + vite now config tailwindcss..").blue().bold());
 
     env::set_current_dir(name).expect("Error to change folder");
+    println!("{}", format!("\nnow install tailwindcss and config...").yellow());
 
-    Command::new("npm").args(["install", "tailwindcss", "@tailwindcss/vite"]).status().expect("Error to install tailwindcss/vite");
-
-    fs::write("vite.config.ts", r#"
+    Command::new("npm")
+        .args(["install", "tailwindcss", "@tailwindcss/vite"])
+        .status()
+        .expect("Error to install tailwindcss/vite");
+    fs::write(
+        "vite.config.ts",
+        r#"
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
@@ -27,12 +46,17 @@ export default defineConfig({
    react(), tailwindcss(),
   ],
 })
-"#).expect("Error to created config in vite.config.ts");
-    fs::write("src/index.css", import_tailwindcss).expect("Error to import tailwindcss in index.css");
+"#,
+    )
+    .expect("Error to created config in vite.config.ts");
+    fs::write("src/index.css", import_tailwindcss)
+        .expect("Error to import tailwindcss in index.css");
     fs::remove_file("src/App.css").expect("Error to remove app.css");
     fs::remove_dir_all("src/assets").expect("Error to remove assets");
     fs::write("public/WebFast.svg", ICON).expect("Error to import logo");
-    fs::write("index.html", r#"
+    fs::write(
+        "index.html",
+        r#"
 <!doctype html>
 <html lang="en">
   <head>
@@ -47,7 +71,9 @@ export default defineConfig({
   </body>
 </html>
 
-    "#).expect("Error to refactor index.html");
+    "#,
+    )
+    .expect("Error to refactor index.html");
     fs::write("src/App.tsx", r#"
 export default function App() {
 return (
@@ -72,9 +98,18 @@ return (
         fs::remove_file(format!("public/{file}")).expect("Error remove svgs default");
     }
 
-    Command::new("npm").arg("install").status().expect("Error install npm modules");
-    println!("{}", format!("\nTHE PROJECT IS READY, RUNNING... ").green().bold());
-    Command::new("npm").args(["run", "dev"]).status().expect("Error install npm modules");
-
-    
+    Command::new("npm")
+        .arg("install")
+        .status()
+        .expect("Error install npm modules");
+    println!(
+        "{}",
+        format!("\nTHE PROJECT IS READY, RUNNING... ")
+            .green()
+            .bold()
+    );
+    Command::new("npm")
+        .args(["run", "dev"])
+        .status()
+        .expect("Error install npm modules");
 }
